@@ -8,7 +8,7 @@ WriteMakefile(
     AUTHOR           => q{Dimitrios - Georgios Kontopoulos <dgkontopoulos@member.fsf.org>},
     VERSION_FROM     => 'lib/Encode/BetaCode.pm',
     ABSTRACT_FROM    => 'lib/Encode/BetaCode.pm',
-    LICENSE          => 'Artistic_2_0',
+    LICENSE          => 'perl',
     PL_FILES         => {},
     MIN_PERL_VERSION => 5.006,
     CONFIGURE_REQUIRES => {

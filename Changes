@@ -1,5 +1,8 @@
 Revision history for Encode-BetaCode
 
+0.03    12/12/12, 23:15
+	Added the 'greek_punct' language, removed duplicated substitutions.
+
 0.02    Date/time
         First version, released on an unsuspecting world.
 

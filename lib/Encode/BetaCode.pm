@@ -25,11 +25,11 @@ Encode::BetaCode - Perl module for converting to and from Beta Code
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 =head1 SYNOPSIS
 
@@ -43,24 +43,42 @@ our $VERSION = '0.02';
 
 B<Encode::BetaCode> provides functions that convert Beta Code strings
 to Unicode and reverse. No functions are exported by default.
+
 "use Encode::BetaCode qw(:all)" exports all of them.
 
 =head1 FUNCTIONS
 
-=over 5
+=over
 
 =item B<beta_decode> LANGUAGE, STRING
 
 Converts strings from Beta Code to Unicode.
 
-Supported languages (so far): C<'greek'>
+=over
+
+=item Supported languages (so far):
+
+-> C<'greek'>
+
+-> C<'greek_punct'> (with punctuation conversions)
+
+=back
+
+=back
 
 =cut
 
 sub beta_decode
 {
     my ( $language, $input ) = @_;
-    if ( $language eq 'greek' )
+
+    if ( $language eq 'greek_punct' )
+    {
+        #Punctuation.#
+        $input =~ s/:/·/g;
+        $input =~ s/_/—/g;
+    }
+    if ( $language eq 'greek' || $language eq 'greek_punct' )
     {
         #Uppercase accents and diacritics.#
         $input =~ s/[*]a&/Ᾱ/gi;
@@ -81,22 +99,7 @@ sub beta_decode
         $input =~ s/[*]\\a/Ὰ/gi;
         $input =~ s/[*]\/a/Ά/gi;
         $input =~ s/[*]a[|]/ᾼ/gi;
-        $input =~ s/[*][)]\/a[|]/ᾌ/gi;
-        $input =~ s/[*][(]\/a[|]/ᾍ/gi;
-        $input =~ s/[*][)]=a[|]/ᾎ/gi;
-        $input =~ s/[*][(]=a[|]/ᾏ/gi;
-        $input =~ s/[*][(]\\a/Ἃ/gi;
-        $input =~ s/[*][)]\/a/Ἄ/gi;
-        $input =~ s/[*][(]\/a/Ἅ/gi;
-        $input =~ s/[*][)]=a/Ἆ/gi;
-        $input =~ s/[*][(]=a/Ἇ/gi;
-        $input =~ s/[*][)]a[|]/ᾈ/gi;
-        $input =~ s/[*][(]a[|]/ᾉ/gi;
-        $input =~ s/[*][)]a/Ἁ/gi;
-        $input =~ s/[*][(]a/Ἁ/gi;
-        $input =~ s/[*]\\a/Ὰ/gi;
-        $input =~ s/[*]\/a/Ά/gi;
-        $input =~ s/[*]a[|]/ᾼ/gi;
+        $input =~ s/[*][)]\\a/Ἂ/g;
         $input =~ s/[*][)]\\e/Ἒ/gi;
         $input =~ s/[*][(]\\e/Ἓ/gi;
         $input =~ s/[*][)]\/e/Ἔ/gi;
@@ -105,31 +108,6 @@ sub beta_decode
         $input =~ s/[*][(]e/Ἑ/gi;
         $input =~ s/[*]\\e/Ὲ/gi;
         $input =~ s/[*]\/e/Έ/gi;
-        $input =~ s/[*][)]\\e/Ἒ/gi;
-        $input =~ s/[*][(]\\e/Ἓ/gi;
-        $input =~ s/[*][)]\/e/Ἔ/gi;
-        $input =~ s/[*][(]\/e/Ἕ/gi;
-        $input =~ s/[*][)]e/Ἐ/gi;
-        $input =~ s/[*][(]e/Ἑ/gi;
-        $input =~ s/[*]\\e/Ὲ/gi;
-        $input =~ s/[*]\/e/Έ/gi;
-        $input =~ s/[*][)]\/h[|]/ᾜ/gi;
-        $input =~ s/[*][(]\/h[|]/ᾝ/gi;
-        $input =~ s/[*][)]=h[|]/ᾞ/gi;
-        $input =~ s/[*][(]=h[|]/ᾟ/gi;
-        $input =~ s/[*][)]\\h/Ἢ/gi;
-        $input =~ s/[*][(]\\h/Ἣ/gi;
-        $input =~ s/[*][)]\/h/Ἤ/gi;
-        $input =~ s/[*][(]\/h/Ἥ/gi;
-        $input =~ s/[*][)]=h/Ἦ/gi;
-        $input =~ s/[*][(]=h/Ἧ/gi;
-        $input =~ s/[*][)]h[|]/ᾘ/gi;
-        $input =~ s/[*][(]h[|]/ᾙ/gi;
-        $input =~ s/[*][)]h/Ἠ/gi;
-        $input =~ s/[*][(]h/Ἡ/gi;
-        $input =~ s/[*]\\h/Ὴ/gi;
-        $input =~ s/[*]\/h/Ή/gi;
-        $input =~ s/[*]h[|]/ῌ/gi;
         $input =~ s/[*][)]\/h[|]/ᾜ/gi;
         $input =~ s/[*][(]\/h[|]/ᾝ/gi;
         $input =~ s/[*][)]=h[|]/ᾞ/gi;
@@ -160,27 +138,6 @@ sub beta_decode
         $input =~ s/[*][(]i/Ἱ/gi;
         $input =~ s/[*]\\i/Ὶ/gi;
         $input =~ s/[*]\/i/Ί/gi;
-        $input =~ s/[*][+]i/Ϊ/gi;
-        $input =~ s/[*][)]\\i/Ἲ/gi;
-        $input =~ s/[*][(]\\i/Ἳ/gi;
-        $input =~ s/[*][)]\/i/Ἴ/gi;
-        $input =~ s/[*][(]\/i/Ἵ/gi;
-        $input =~ s/[*][)]=i/Ἶ/gi;
-        $input =~ s/[*][(]=i/Ἷ/gi;
-        $input =~ s/[*][)]i/Ἰ/gi;
-        $input =~ s/[*][(]i/Ἱ/gi;
-        $input =~ s/[*]\\i/Ὶ/gi;
-        $input =~ s/[*]\/i/Ί/gi;
-        $input =~ s/[*][)]\\o/Ὂ/gi;
-        $input =~ s/[*][(]\\o/Ὃ/gi;
-        $input =~ s/[*][)]\/o/Ὄ/gi;
-        $input =~ s/[*][(]\/o/Ὅ/gi;
-        $input =~ s/[*][)]=o/Ὄ/gi;
-        $input =~ s/[*][(]=o/Ὅ/gi;
-        $input =~ s/[*][)]o/Ὀ/gi;
-        $input =~ s/[*][(]o/Ὁ/gi;
-        $input =~ s/[*]\\o/Ὸ/gi;
-        $input =~ s/[*]\/o/Ό/gi;
         $input =~ s/[*][)]\\o/Ὂ/gi;
         $input =~ s/[*][(]\\o/Ὃ/gi;
         $input =~ s/[*][)]\/o/Ὄ/gi;
@@ -202,30 +159,6 @@ sub beta_decode
         $input =~ s/[*][(]u/Ὑ/gi;
         $input =~ s/[*]\\u/Ὺ/gi;
         $input =~ s/[*]\/u/Ύ/gi;
-        $input =~ s/[*][+]u/Ϋ/gi;
-        $input =~ s/[*][(]\\u/Ὓ/gi;
-        $input =~ s/[*][(]\/u/Ὕ/gi;
-        $input =~ s/[*][(]=u/Ὗ/gi;
-        $input =~ s/[*][(]u/Ὑ/gi;
-        $input =~ s/[*]\\u/Ὺ/gi;
-        $input =~ s/[*]\/u/Ύ/gi;
-        $input =~ s/[*][)]\/w[|]/ᾬ/gi;
-        $input =~ s/[*][(]\/w[|]/ᾭ/gi;
-        $input =~ s/[*][)]=w[|]/ᾮ/gi;
-        $input =~ s/[*][(]=w[|]/ᾯ/gi;
-        $input =~ s/[*][)]\\w/Ὢ/gi;
-        $input =~ s/[*][(]\\w/Ὣ/gi;
-        $input =~ s/[*][)]\/w/Ὤ/gi;
-        $input =~ s/[*][(]\/w/Ὥ/gi;
-        $input =~ s/[*][)]=w/Ὦ/gi;
-        $input =~ s/[*][(]=w/Ὧ/gi;
-        $input =~ s/[*][)]w[|]/ᾨ/gi;
-        $input =~ s/[*][(]w[|]/ᾩ/gi;
-        $input =~ s/[*][)]w/Ὠ/gi;
-        $input =~ s/[*][(]w/Ὡ/gi;
-        $input =~ s/[*]\\w/Ὼ/gi;
-        $input =~ s/[*]\/w/Ώ/gi;
-        $input =~ s/[*]w[|]/ῼ/gi;
         $input =~ s/[*][)]\/w[|]/ᾬ/gi;
         $input =~ s/[*][(]\/w[|]/ᾭ/gi;
         $input =~ s/[*][)]=w[|]/ᾮ/gi;
@@ -298,8 +231,11 @@ sub beta_decode
         $input =~ s/i&/ῑ/gi;
         $input =~ s/i'/ῐ/gi;
         $input =~ s/i[+]\\/ῒ/gi;
+        $input =~ s/i\\[+]/ῒ/gi;
         $input =~ s/i[+]\//ΐ/gi;
+        $input =~ s/i\/[+]/ΐ/gi;
         $input =~ s/i[+]=/ῗ/gi;
+        $input =~ s/i=[+]/ῗ/gi;
         $input =~ s/i[+]/ϊ/gi;
         $input =~ s/i[)]\\/ἲ/gi;
         $input =~ s/i[(]\\/ἳ/gi;
@@ -325,8 +261,11 @@ sub beta_decode
         $input =~ s/u&/ῡ/gi;
         $input =~ s/u'/ῠ/gi;
         $input =~ s/u[+]\\/ῢ/gi;
+        $input =~ s/u\\[+]/ῢ/gi;
         $input =~ s/u[+]\//ΰ/gi;
+        $input =~ s/u\/[+]/ΰ/gi;
         $input =~ s/u[+]=/ῧ/gi;
+        $input =~ s/u=[+]/ῧ/gi;
         $input =~ s/u[+]/ϋ/gi;
         $input =~ s/u[)]\\/ὒ/gi;
         $input =~ s/u[(]\\/ὓ/gi;
@@ -425,18 +364,32 @@ sub beta_decode
     }
     else
     {
-        warn 'Only "greek" is available for now.';
+        warn 'Only "greek/greek_punct" is available for now.';
     }
     return $input;
 }
+
+=over
 
 =item  B<beta_encode> LANGUAGE, STYLE, STRING
 
 Converts strings from Unicode to Beta Code.
 
-Supported languages (so far): C<'greek'>
+=over
 
-Supported styles (so far): C<'TLG'>, C<'Perseus'>
+=item Supported languages (so far):
+
+-> C<'greek'>
+
+-> C<'greek_punct'> (with punctuation conversions)
+
+=item Supported styles (so far):
+
+-> C<'TLG'>
+
+-> C<'Perseus'>
+
+=back
 
 =back
 
@@ -445,8 +398,16 @@ Supported styles (so far): C<'TLG'>, C<'Perseus'>
 sub beta_encode
 {
     my ( $language, $style, $input ) = @_;
-    if ( $language eq 'greek' )
+
+    if ( $language eq 'greek_punct' )
     {
+        #Punctuation.#
+        $input =~ s/·/:/g;
+        $input =~ s/—/_/g;
+    }
+    if ( $language eq 'greek' || $language eq 'greek_punct' )
+    {
+
         #Uppercase accents and diacritics.#
         $input =~ s/Ᾱ/*a&/g;
         $input =~ s/Ᾰ/*a'/g;
@@ -466,22 +427,8 @@ sub beta_encode
         $input =~ s/Ὰ/*\a/g;
         $input =~ s/Ά/*\/a/g;
         $input =~ s/ᾼ/*a|/g;
-        $input =~ s/ᾌ/*)\/a|/g;
-        $input =~ s/ᾍ/*(\/a|/g;
-        $input =~ s/ᾎ/*)=a|/g;
-        $input =~ s/ᾏ/*(=a|/g;
+        $input =~ s/Ἂ/*)\\a/g;
         $input =~ s/Ἃ/*(\\a/g;
-        $input =~ s/Ἄ/*)\/a/g;
-        $input =~ s/Ἅ/*(\/a/g;
-        $input =~ s/Ἆ/*)=a/g;
-        $input =~ s/Ἇ/*(=a/g;
-        $input =~ s/ᾈ/*)a|/g;
-        $input =~ s/ᾉ/*(a|/g;
-        $input =~ s/Ἁ/*)a/g;
-        $input =~ s/Ἁ/*(a/g;
-        $input =~ s/Ὰ/*\a/g;
-        $input =~ s/Ά/*\/a/g;
-        $input =~ s/ᾼ/*a|/g;
         $input =~ s/Ἒ/*)\\e/g;
         $input =~ s/Ἓ/*(\\e/g;
         $input =~ s/Ἔ/*)\/e/g;
@@ -490,31 +437,7 @@ sub beta_encode
         $input =~ s/Ἑ/*(e/g;
         $input =~ s/Ὲ/*\e/g;
         $input =~ s/Έ/*\/e/g;
-        $input =~ s/Ἒ/*)\\e/g;
-        $input =~ s/Ἓ/*(\\e/g;
-        $input =~ s/Ἔ/*)\/e/g;
-        $input =~ s/Ἕ/*(\/e/g;
-        $input =~ s/Ἐ/*)e/g;
-        $input =~ s/Ἑ/*(e/g;
         $input =~ s/Ὲ/*\\e/g;
-        $input =~ s/Έ/*\/e/g;
-        $input =~ s/ᾜ/*)\/h|/g;
-        $input =~ s/ᾝ/*(\/h|/g;
-        $input =~ s/ᾞ/*)=h|/g;
-        $input =~ s/ᾟ/*(=h|/g;
-        $input =~ s/Ἢ/*)\\h/g;
-        $input =~ s/Ἣ/*(\\h/g;
-        $input =~ s/Ἤ/*)\/h/g;
-        $input =~ s/Ἥ/*(\/h/g;
-        $input =~ s/Ἦ/*)=h/g;
-        $input =~ s/Ἧ/*(=h/g;
-        $input =~ s/ᾘ/*)h|/g;
-        $input =~ s/ᾙ/*(h|/g;
-        $input =~ s/Ἠ/*)h/g;
-        $input =~ s/Ἡ/*(h/g;
-        $input =~ s/Ὴ/*\\h/g;
-        $input =~ s/Ή/*\/h/g;
-        $input =~ s/ῌ/*h|/g;
         $input =~ s/ᾜ/*)\/h|/g;
         $input =~ s/ᾝ/*(\/h|/g;
         $input =~ s/ᾞ/*)=h|/g;
@@ -545,27 +468,6 @@ sub beta_encode
         $input =~ s/Ἱ/*(i/g;
         $input =~ s/Ὶ/*\\i/g;
         $input =~ s/Ί/*\/i/g;
-        $input =~ s/Ϊ/*+i/g;
-        $input =~ s/Ἲ/*)\\i/g;
-        $input =~ s/Ἳ/*(\\i/g;
-        $input =~ s/Ἴ/*)\/i/g;
-        $input =~ s/Ἵ/*(\/i/g;
-        $input =~ s/Ἶ/*)=i/g;
-        $input =~ s/Ἷ/*(=i/g;
-        $input =~ s/Ἰ/*)i/g;
-        $input =~ s/Ἱ/*(i/g;
-        $input =~ s/Ὶ/*\\i/g;
-        $input =~ s/Ί/*\/i/g;
-        $input =~ s/Ὂ/*)\\o/g;
-        $input =~ s/Ὃ/*(\\o/g;
-        $input =~ s/Ὄ/*)\/o/g;
-        $input =~ s/Ὅ/*(\/o/g;
-        $input =~ s/Ὄ/*)=o/g;
-        $input =~ s/Ὅ/*(=o/g;
-        $input =~ s/Ὀ/*)o/g;
-        $input =~ s/Ὁ/*(o/g;
-        $input =~ s/Ὸ/*\\o/g;
-        $input =~ s/Ό/*\/o/g;
         $input =~ s/Ὂ/*)\\o/g;
         $input =~ s/Ὃ/*(\\o/g;
         $input =~ s/Ὄ/*)\/o/g;
@@ -587,30 +489,6 @@ sub beta_encode
         $input =~ s/Ὑ/*(u/g;
         $input =~ s/Ὺ/*\u/g;
         $input =~ s/Ύ/*\/u/g;
-        $input =~ s/Ϋ/*+u/g;
-        $input =~ s/Ὓ/*(\\u/g;
-        $input =~ s/Ὕ/*(\/u/g;
-        $input =~ s/Ὗ/*(=u/g;
-        $input =~ s/Ὑ/*(u/g;
-        $input =~ s/Ὺ/*\u/g;
-        $input =~ s/Ύ/*\/u/g;
-        $input =~ s/ᾬ/*)\/w|/g;
-        $input =~ s/ᾭ/*(\/w|/g;
-        $input =~ s/ᾮ/*)=w|/g;
-        $input =~ s/ᾯ/*(=w|/g;
-        $input =~ s/Ὢ/*)\\w/g;
-        $input =~ s/Ὣ/*(\\w/g;
-        $input =~ s/Ὤ/*)\/w/g;
-        $input =~ s/Ὥ/*(\/w/g;
-        $input =~ s/Ὦ/*)=w/g;
-        $input =~ s/Ὧ/*(=w/g;
-        $input =~ s/ᾨ/*)w|/g;
-        $input =~ s/ᾩ/*(w|/g;
-        $input =~ s/Ὠ/*)w/g;
-        $input =~ s/Ὡ/*(w/g;
-        $input =~ s/Ὼ/*\\w/g;
-        $input =~ s/Ώ/*\/w/g;
-        $input =~ s/ῼ/*w|/g;
         $input =~ s/ᾬ/*)\/w|/g;
         $input =~ s/ᾭ/*(\/w|/g;
         $input =~ s/ᾮ/*)=w|/g;
@@ -804,7 +682,7 @@ sub beta_encode
     }
     else
     {
-        warn 'Only "greek" is available for now.';
+        warn 'Only "greek/greek_punct" is available for now.';
     }
 
     if ( $style eq 'TLG' )
@@ -839,7 +717,9 @@ Dimitrios - Georgios Kontopoulos, C<< <dgkontopoulos at member.fsf.org> >>
 =head1 ACKNOWLEDGEMENTS
 
 The inspiration to write this module is thanks to B<Jennie Petoumenou>, a 
-member of the Ubuntu-gr community (L<http://ubuntu-gr.org/>). Her contribution to defining and testing the conversion rules was more than significant.
+member of the Ubuntu-gr community (L<http://ubuntu-gr.org/>).
+
+Her contribution to defining and testing the conversion rules was more than significant.
 
 =head1 SEE ALSO
 
