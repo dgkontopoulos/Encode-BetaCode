@@ -1,5 +1,8 @@
 Revision history for Perl module Encode::BetaCode
 
+0.06    2013-10-19 10:57
+    - Fixed the Changes file, thanks to a pull request by NEILB.
+
 0.05    2013-10-19 01:16
     - Added support for text with combined characters.
 
