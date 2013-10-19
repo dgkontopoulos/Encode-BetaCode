@@ -7,6 +7,7 @@ use warnings;
 require Exporter;
 
 use base qw(Exporter);
+use Unicode::Normalize;
 
 our %EXPORT_TAGS = (
     'all' => [
@@ -25,13 +26,13 @@ Encode::BetaCode - Perl module for converting to and from Beta Code
 
 =head1 VERSION
 
-Version 0.04
+Version 0.05
 
 =encoding utf8
 
 =cut
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 =head1 SYNOPSIS
 
@@ -375,7 +376,8 @@ sub beta_decode
 
 =item  B<beta_encode> LANGUAGE, STYLE, STRING
 
-Converts strings from Unicode to Beta Code.
+Converts strings from Unicode to Beta Code. It can also handle text with
+ combined characters.
 
 =over
 
@@ -400,6 +402,18 @@ Converts strings from Unicode to Beta Code.
 sub beta_encode
 {
     my ( $language, $style, $input ) = @_;
+
+    # Decompose combined characters (if any).
+    use utf8;
+    unless ( utf8::is_utf8($input) )
+    {
+        utf8::decode($input);
+        $input = NFC($input);
+    }
+    else
+    {
+        no utf8;
+    }
 
     if ( $language eq 'greek_punct' )
     {
@@ -733,7 +747,7 @@ L<http://en.wikipedia.org/wiki/Beta_code>
 
 =head1 COPYRIGHT
 
-Copyright 2012 Dimitrios - Georgios Kontopoulos.
+Copyright 2012-13 Dimitrios - Georgios Kontopoulos.
 
 =head1 LICENSE
 

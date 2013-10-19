@@ -3,12 +3,12 @@
 use strict;
 use warnings;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use Encode::BetaCode qw(:all);
 
 {
-    #Testing beta_decode.#
+    #Testing beta_decode without punctuation conversions.#
     my $input_text = << 'END';
 *ma/qe su\ o( mona/zwn kai\ pisto\s a)/nqrwpos, kai\ th=s eu)sebei/as e)rga/ths, kai\
 dida/xqhti eu)aggelikh\n politei/an, sw/matos doulagwgi/an, fro/nhma tapeino/n,
@@ -51,5 +51,31 @@ ta\ musth/ria pa/nta kai\ pa=san th\n gnw=sin, kai\ e)a\n e)/xw pa=san th\n pi/s
 w(/ste o)/rh meqista/nein, a)ga/phn de\ mh\ e)/xw, ou)de/n ei)mi.
 END
     is( beta_encode( 'greek', 'Perseus', $input_text ),
-        $should_be_output, 'beta code encoding works correctly' );
+        $should_be_output,
+        'beta code encoding works correctly with decomposed encoding' );
+}
+
+{
+    #Testing beta_encode with combined characters.#
+    my $input_text = << 'END';
+Πρῶτον εἰπεῖν περὶ τί καὶ τίνος ἐστὶν ἡ σκέψις, ὅτι περὶ
+ἀπόδειξιν καὶ ἐπιστήμης ἀποδεικτικῆς· εἶτα διορίσαι τί
+ἐστι πρότασις καὶ τί ὅρος καὶ τί συλλογισμός, καὶ ποῖος
+τέλειος καὶ ποῖος ἀτελής, μετὰ δὲ ταῦτα τί τὸ ἐν ὅλῳ εἶναι
+ ἢ μὴ εἶναι τόδε τῷδε, καὶ τί λέγομεν τὸ κατὰ παντὸς
+ἢ μηδενὸς κατηγορεῖσθαι.
+END
+
+    my $should_be_output = << 'END';
+*PRW=TON EI)PEI=N PERI\ TI/ KAI\ TI/NOS E)STI\N H( SKE/YIS, O(/TI PERI\
+A)PO/DEICIN KAI\ E)PISTH/MHS A)PODEIKTIKH=S: EI)=TA DIORI/SAI TI/
+E)STI PRO/TASIS KAI\ TI/ O(/ROS KAI\ TI/ SULLOGISMO/S, KAI\ POI=OS
+TE/LEIOS KAI\ POI=OS A)TELH/S, META\ DE\ TAU=TA TI/ TO\ E)N O(/LW| EI)=NAI
+ H)\ MH\ EI)=NAI TO/DE TW=|DE, KAI\ TI/ LE/GOMEN TO\ KATA\ PANTO\S
+H)\ MHDENO\S KATHGOREI=SQAI.
+END
+
+    is( beta_encode( 'greek_punct', 'TLG', $input_text ),
+        $should_be_output,
+        'beta code encoding works correctly with combined characters' );
 }
