@@ -26,13 +26,13 @@ Encode::BetaCode - Perl module for converting to and from Beta Code
 
 =head1 VERSION
 
-Version 0.06
+Version 0.07
 
 =encoding utf8
 
 =cut
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 =head1 SYNOPSIS
 
@@ -431,7 +431,7 @@ sub beta_encode
         $input =~ s/ᾍ/*(\/a|/g;
         $input =~ s/ᾎ/*)=a|/g;
         $input =~ s/ᾏ/*(=a|/g;
-        $input =~ s/Ἃ/*(\a/g;
+        $input =~ s/Ἃ/*(\\a/g;
         $input =~ s/Ἄ/*)\/a/g;
         $input =~ s/Ἅ/*(\/a/g;
         $input =~ s/Ἆ/*)=a/g;
@@ -734,8 +734,9 @@ Dimitrios - Georgios Kontopoulos, C<< <dgkontopoulos at member.fsf.org> >>
 
 The inspiration to write this module is thanks to B<Jennie Petoumenou>, a 
 member of the Ubuntu-gr community (L<http://ubuntu-gr.org/>).
-
 Her contribution to defining and testing the conversion rules was more than significant.
+
+Valuable contributions in form of bug reports have been also provided by B<Philipp Steinkrüger>.
 
 =head1 SEE ALSO
 
