@@ -26,13 +26,13 @@ Encode::BetaCode - Perl module for converting to and from Beta Code
 
 =head1 VERSION
 
-Version 0.07
+Version 0.08
 
 =encoding utf8
 
 =cut
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 =head1 SYNOPSIS
 
@@ -75,14 +75,9 @@ sub beta_decode
 {
     my ( $language, $input ) = @_;
 
-    if ( $language eq 'greek_punct' )
-    {
-        #Punctuation.#
-        $input =~ s/:/·/g;
-        $input =~ s/_/—/g;
-    }
     if ( $language eq 'greek' || $language eq 'greek_punct' )
     {
+
         #Uppercase accents and diacritics.#
         $input =~ s/[*]a&/Ᾱ/gi;
         $input =~ s/[*]a'/Ᾰ/gi;
@@ -369,6 +364,20 @@ sub beta_decode
     {
         warn 'Only "greek/greek_punct" is available for now.';
     }
+
+    if ( $language eq 'greek_punct' )
+    {
+
+        #Punctuation.#
+        $input =~ s/:/·/g;
+        $input =~ s/_/—/g;
+        $input =~ s/#/ʹ/g;
+
+        # If ' has not been used for breve (˘), then
+        # it is an apostrophe.
+        $input =~ s/'/’/g;
+    }
+
     return $input;
 }
 
@@ -417,9 +426,17 @@ sub beta_encode
 
     if ( $language eq 'greek_punct' )
     {
+
         #Punctuation.#
         $input =~ s/·/:/g;
         $input =~ s/—/_/g;
+        $input =~ s/’/'/g;
+
+        # The true Unicode equivalent of the numeral (#) is ʹ.
+        # However, the NFC() function call above will turn ʹ
+        # into ʹ. Therefore, the conversion below will be
+        # from ʹ into #, and not from ʹ into #.
+        $input =~ s/ʹ/#/g;
     }
     if ( $language eq 'greek' || $language eq 'greek_punct' )
     {
@@ -736,7 +753,8 @@ The inspiration to write this module is thanks to B<Jennie Petoumenou>, a
 member of the Ubuntu-gr community (L<http://ubuntu-gr.org/>).
 Her contribution to defining and testing the conversion rules was more than significant.
 
-Valuable contributions in form of bug reports have been also provided by B<Philipp Steinkrüger>.
+Valuable contributions in form of bug reports have been also provided by 
+B<Philipp Steinkrüger>, and B<Juan Miguel Corral Cano>.
 
 =head1 SEE ALSO
 
@@ -748,7 +766,7 @@ L<http://en.wikipedia.org/wiki/Beta_code>
 
 =head1 COPYRIGHT
 
-Copyright 2012-13 Dimitrios - Georgios Kontopoulos.
+Copyright 2012-16 Dimitrios - Georgios Kontopoulos.
 
 =head1 LICENSE
 

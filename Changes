@@ -1,5 +1,8 @@
 Revision history for Perl module Encode::BetaCode
 
+0.08    2016-07-12 21:50
+    - Added support for the apostrophe and the numeral, thanks to a request by Juan Miguel Corral Cano.
+
 0.07    2013-12-01 15:45
     - Fixed a bug, regarding the betacode encoding of a specific character.
 

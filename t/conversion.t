@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 3;
+use Test::More tests => 7;
 
 use Encode::BetaCode qw(:all);
 
@@ -78,4 +78,64 @@ END
     is( beta_encode( 'greek_punct', 'TLG', $input_text ),
         $should_be_output,
         'beta code encoding works correctly with combined characters' );
+}
+
+{
+    #Testing beta_encode with the numeral character (ʹ).#
+    my $input_text = << 'END';
+καὶ Λαβως καὶ Σαλη καὶ Ερωμωθ πόλεις κθʹ καὶ αἱ κῶμαι αὐτῶν
+END
+
+    my $should_be_output = << 'END';
+KAI\ *LABWS KAI\ *SALH KAI\ *ERWMWQ PO/LEIS KQ# KAI\ AI( KW=MAI AU)TW=N
+END
+
+    is( beta_encode( 'greek_punct', 'TLG', $input_text ),
+        $should_be_output,
+        'beta code encoding works correctly with the numeral character' );
+}
+
+{
+    #Testing beta_decode with the numeral character (ʹ).#
+    my $input_text = << 'END';
+KAI\ *LABWS KAI\ *SALH KAI\ *ERWMWQ PO/LEIS KQ# KAI\ AI( KW=MAI AU)TW=N
+END
+
+    my $should_be_output = << 'END';
+καὶ Λαβως καὶ Σαλη καὶ Ερωμωθ πόλεις κθʹ καὶ αἱ κῶμαι αὐτῶν
+END
+
+    is( beta_decode( 'greek_punct', $input_text ),
+        $should_be_output,
+        'beta code decoding works correctly with the numeral character' );
+}
+
+{
+    #Testing beta_decode with the apostrophe character (’).#
+    my $input_text = << 'END';
+*GLW/TTA LANQA/NOUSA T' ALHQH/ LE/GEI.
+END
+
+    my $should_be_output = << 'END';
+Γλώττα λανθάνουσα τ’ αληθή λέγει.
+END
+
+    is( beta_decode( 'greek_punct', $input_text ),
+        $should_be_output,
+        'beta code decoding works correctly with the apostrophe character' );
+}
+
+{
+    #Testing beta_encode with the apostrophe character (’).#
+    my $input_text = << 'END';
+Γλώττα λανθάνουσα τ’ αληθή λέγει.
+END
+
+    my $should_be_output = << 'END';
+*GLW/TTA LANQA/NOUSA T' ALHQH/ LE/GEI.
+END
+
+    is( beta_encode( 'greek_punct', 'TLG', $input_text ),
+        $should_be_output,
+        'beta code encoding works correctly with the apostrophe character' );
 }
