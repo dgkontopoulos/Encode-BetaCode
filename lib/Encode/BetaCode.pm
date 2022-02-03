@@ -26,13 +26,13 @@ Encode::BetaCode - Perl module for converting to and from Beta Code
 
 =head1 VERSION
 
-Version 0.10
+Version 0.11
 
 =encoding utf8
 
 =cut
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 =head1 SYNOPSIS
 
@@ -255,7 +255,7 @@ sub beta_decode
         $input =~ s/o\\/ὸ/gi;
         $input =~ s/o\//ό/gi;
         $input =~ s/r[)]/ῤ/gi;
-        $input =~ s/r[(]/ῤ/gi;
+        $input =~ s/r[(]/ῥ/gi;
         $input =~ s/u&/ῡ/gi;
         $input =~ s/u'/ῠ/gi;
         $input =~ s/u[+]\\/ῢ/gi;
